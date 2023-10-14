@@ -1,0 +1,107 @@
+•	Queries: 
+SQL queries are used for few data modelling to find distinct characters, distinct countries, distinct countries by Year, distinct countries by Type, and Genres in the Netflix Data.
+Distinct Characters: 
+SELECT DISTINCT distinct_characters
+FROM (
+  SELECT DISTINCT REPLACE(name, ' ', '') AS distinct_characters
+  FROM raw_credits
+  UNION ALL
+  SELECT DISTINCT character1
+  FROM raw_credits
+  UNION ALL
+  SELECT DISTINCT character2
+  FROM raw_credits
+  UNION ALL
+  SELECT DISTINCT character3
+  FROM raw_credits
+  UNION ALL
+  SELECT DISTINCT character4
+  FROM raw_credits
+  UNION ALL
+  SELECT DISTINCT character5
+  FROM raw_credits
+  UNION ALL
+  SELECT DISTINCT character6
+  FROM raw_credits
+  UNION ALL
+  SELECT DISTINCT character7
+  FROM raw_credits
+  UNION ALL
+  SELECT DISTINCT character8
+  FROM raw_credits
+  UNION ALL
+  SELECT DISTINCT character9
+  FROM raw_credits
+) AS distinct_characters_table
+WHERE distinct_characters IS NOT NULL AND distinct_characters <> '';;
+
+Distinct Countries: 
+SELECT DISTINCT production_countries1 AS unique_production_countries
+FROM raw_titles
+WHERE production_countries1 IS NOT NULL
+UNION
+SELECT DISTINCT production_countries2 AS unique_production_countries
+FROM raw_titles
+WHERE production_countries2 IS NOT NULL
+UNION
+SELECT DISTINCT production_countries3 AS unique_production_countries
+FROM raw_titles
+WHERE production_countries3 IS NOT NULL;
+
+Distinct Countries by Year:
+SELECT production_country, release_year, type, COUNT(*) AS num_titles
+FROM (
+  SELECT production_countries1 AS production_country, release_year, type
+  FROM raw_titles
+  WHERE production_countries1 IS NOT NULL AND type IN ('movie', 'show')
+  UNION ALL
+  SELECT production_countries2 AS production_country, release_year, type
+  FROM raw_titles
+  WHERE production_countries2 IS NOT NULL AND type IN ('movie', 'show')
+  UNION ALL
+  SELECT production_countries3 AS production_country, release_year, type
+  FROM raw_titles
+  WHERE production_countries3 IS NOT NULL AND production_countries3 <> '' AND type IN ('movie', 'show')
+) AS countries
+WHERE release_year IS NOT NULL
+GROUP BY production_country, release_year, type 
+ORDER BY production_country, release_year, num_titles DESC;
+ 
+Distinct Countries by Type:
+SELECT production_country, type, COUNT(*) AS num_titles
+FROM (
+  SELECT production_countries1 AS production_country, type
+  FROM raw_titles
+  WHERE production_countries1 IS NOT NULL AND type IN ('movie', 'show')
+  UNION ALL
+  SELECT production_countries2 AS production_country, type
+  FROM raw_titles
+  WHERE production_countries2 IS NOT NULL AND type IN ('movie', 'show')
+  UNION ALL
+  SELECT production_countries3 AS production_country, type
+  FROM raw_titles
+  WHERE production_countries3 IS NOT NULL AND production_countries3 <> '' AND type IN ('movie', 'show')
+) AS countries
+GROUP BY production_country, type
+ORDER BY production_country, num_titles DESC;
+
+Genre:
+
+SELECT DISTINCT genre
+FROM (
+  SELECT genres1 AS genre FROM raw_titles WHERE genres1 IS NOT NULL
+  UNION
+  SELECT genres2 AS genre FROM raw_titles WHERE genres2 IS NOT NULL
+  UNION
+  SELECT genres3 AS genre FROM raw_titles WHERE genres3 IS NOT NULL
+  UNION
+  SELECT genres4 AS genre FROM raw_titles WHERE genres4 IS NOT NULL
+  UNION
+  SELECT genres5 AS genre FROM raw_titles WHERE genres5 IS NOT NULL
+  UNION
+  SELECT genres6 AS genre FROM raw_titles WHERE genres6 IS NOT NULL
+  UNION
+  SELECT genres7 AS genre FROM raw_titles WHERE genres7 IS NOT NULL
+  UNION
+  SELECT genres8 AS genre FROM raw_titles WHERE genres8 IS NOT NULL
+) AS all_genres;
